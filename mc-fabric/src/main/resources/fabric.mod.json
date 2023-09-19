@@ -1,0 +1,35 @@
+{
+	"schemaVersion": 1,
+	"id": "voxelwrench",
+	"version": "${version}",
+	"name": "Voxelwrench",
+	"description": "Geometry nodes for your Minecraft building experience",
+	"authors": [
+		"nahkd123"
+	],
+	"contact": {
+		"homepage": "https://github.com/nahkd123/voxelwrench",
+		"sources": "https://github.com/nahkd123/voxelwrench.git"
+	},
+	"license": "MIT",
+	"icon": "assets/voxelwrench/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": ["io.github.nahkd123.voxelwrench.support.fabric.VoxelwrenchMod"],
+		"client": ["io.github.nahkd123.voxelwrench.support.fabric.VoxelwrenchModClient"]
+	},
+	"mixins": [
+		"voxelwrench.mixins.json",
+		{"config": "voxelwrench.client.mixins.json", "environment": "client"}
+	],
+	"depends": {
+		"fabricloader": ">=0.14.22",
+		"minecraft": "~1.20.1",
+		"java": ">=17",
+		"fabric-api": "*"
+	},
+	"suggests": {
+		"worldedit": "*",
+		"axiom": "*"
+	}
+}
