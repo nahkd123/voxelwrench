@@ -1,0 +1,31 @@
+plugins {
+    id 'com.diffplug.spotless' version '6.20.0' apply false
+}
+
+subprojects {
+    apply plugin: 'java-library'
+    apply plugin: 'eclipse'
+    apply plugin: 'com.diffplug.spotless'
+    apply plugin: 'maven-publish'
+
+    group = rootProject.maven_group
+    version = rootProject.voxelwrench_version
+
+    repositories {
+        mavenCentral()
+    }
+
+    java {
+        withSourcesJar()
+
+        toolchain {
+            languageVersion.set(JavaLanguageVersion.of(17))
+        }
+    }
+
+    spotless {
+        java {
+            licenseHeaderFile("${rootProject.projectDir}/HEADER").updateYearWithLatest(true)
+        }
+    }
+}

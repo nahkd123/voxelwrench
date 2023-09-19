@@ -1,0 +1,10 @@
+eclipse.project.name = 'Voxelwrench MagicaVoxel Support'
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.8.1'
+    api project(':core')
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}

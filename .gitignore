@@ -1,0 +1,21 @@
+# Gradle
+/**/.gradle/
+/**/build/
+!/**/src/**/build/
+
+# Fabric Loom
+/**/run/
+!/**/src/**/run/
+
+# Eclipse + VSCode
+/**/.settings/
+/**/.project
+/**/.classpath
+/**/.factorypath
+/**/.apt_generated/
+/**/bin/
+!/**/src/**/bin/
+
+# Tests
+/**/test/
+!/**/src/**/test/
