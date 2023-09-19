@@ -21,11 +21,54 @@
  */
 package io.github.nahkd123.voxelwrench.support.fabric;
 
+import org.lwjgl.glfw.GLFW;
+
+import io.github.nahkd123.voxelwrench.support.fabric.client.ClientSession;
+import io.github.nahkd123.voxelwrench.support.fabric.client.screen.VoxelwrenchScreen;
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.option.KeyBinding;
+import net.minecraft.client.util.InputUtil;
+import net.minecraft.text.Text;
 
 public class VoxelwrenchModClient implements ClientModInitializer {
+	private KeyBinding keybind;
+	private ClientSession session;
+
 	@Override
 	public void onInitializeClient() {
-		// This entrypoint is suitable for setting up client-specific logic, such as rendering.
+		keybind = new KeyBinding("key.voxelwrench.editor", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_M, "category.voxelwrench.main");
+
+		ClientPlayConnectionEvents.INIT.register((handler, client) -> {
+			// TODO hook to client join event in main thread instead
+			client.execute(() -> {
+				VoxelwrenchMod.LOGGER.info("Setting up Voxelwrench client session...");
+				session = new ClientSession();
+			});
+		});
+
+		ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {
+			client.execute(() -> {
+				if (client.player.isCreativeLevelTwoOp()) {
+					client.inGameHud.getChatHud().addMessage(Text.translatableWithFallback("voxelwrench.chat.welcome", "Welcome to Voxelwrench!"));
+					client.inGameHud.getChatHud().addMessage(Text.translatableWithFallback("voxelwrench.chat.welcome.0", "Press %s to open Voxelwrench editor", Text.keybind("key.voxelwrench.editor")));
+				}
+			});
+		});
+
+		ClientTickEvents.END_CLIENT_TICK.register(client -> {
+			if (keybind.wasPressed()) {
+				while (keybind.wasPressed()) {}
+				openEditor(client);
+			}
+		});
+	}
+
+	private void openEditor(MinecraftClient client) {
+		if (!client.player.isCreativeLevelTwoOp()) return;
+		client.inGameHud.getChatHud().addMessage(Text.literal("debug: open editor"));
+		client.setScreen(new VoxelwrenchScreen(Text.literal("hi")));
 	}
 }
