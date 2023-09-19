@@ -50,6 +50,15 @@ public interface Node {
 	 */
 	public Collection<Socket<?, ?>> getSockets();
 
+	public int getEditorX();
+	public void setEditorX(int value);
+
+	public int getEditorY();
+	public void setEditorY(int value);
+
+	public int getEditorWidth();
+	public void setEditorWidth(int value);
+
 	/**
 	 * <p>Get socket in this node by socket ID.</p>
 	 * @param id The ID of the socket.
@@ -59,9 +68,6 @@ public interface Node {
 		if (id == null) throw new NullPointerException("id can't be null");
 		return getSockets().stream().filter(v -> v.getSocketId().equals(id)).findAny();
 	}
-
-	// TODO use NIO ByteBuffer?
-	// Something like client-side nodes editor would be banger
 
 	default void serialize(DataOutput output, RegistriesManager registries) throws IOException {
 	}

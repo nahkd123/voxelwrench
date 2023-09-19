@@ -93,6 +93,9 @@ public class NodeNetwork {
 		for (Node node : nodes) {
 			output.writeUTF(node.getNodeId());
 			output.writeUTF(node.getFactory().getFactoryId());
+			output.writeInt(node.getEditorX());
+			output.writeInt(node.getEditorY());
+			output.writeInt(node.getEditorWidth());
 
 			ByteArrayOutputStream ba = new ByteArrayOutputStream();
 			DataOutputStream wrapped = new DataOutputStream(ba);
@@ -116,6 +119,9 @@ public class NodeNetwork {
 		for (int i = 0; i < nodesCount; i++) {
 			String nodeId = input.readUTF();
 			String factoryId = input.readUTF();
+			int x = input.readInt();
+			int y = input.readInt();
+			int width = input.readInt();
 
 			int nodeDataSize = input.readInt();
 			byte[] nodeData = new byte[nodeDataSize];
@@ -126,6 +132,9 @@ public class NodeNetwork {
 			if (opt.isPresent()) {
 				DataInputStream wrapped = new DataInputStream(new ByteArrayInputStream(nodeData));
 				Node node = opt.get().initializeNewNode(nodeId);
+				node.setEditorX(x);
+				node.setEditorY(y);
+				node.setEditorWidth(width);
 				node.deserialize(wrapped, registries);
 				net.nodes.add(node);
 			}

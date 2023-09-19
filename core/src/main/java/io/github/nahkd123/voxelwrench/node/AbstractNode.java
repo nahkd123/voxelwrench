@@ -31,6 +31,7 @@ public abstract class AbstractNode implements Node {
 	private NodeFactory factory;
 	private String nodeId;
 	protected final List<Socket<?, ?>> sockets = new ArrayList<>();
+	private int x = 0, y = 0, width = 100;
 
 	public AbstractNode(NodeFactory factory, String nodeId) {
 		this.factory = factory;
@@ -50,5 +51,35 @@ public abstract class AbstractNode implements Node {
 	@Override
 	public Collection<Socket<?, ?>> getSockets() {
 		return sockets;
+	}
+
+	@Override
+	public int getEditorX() {
+		return x;
+	}
+
+	@Override
+	public void setEditorX(int value) {
+		x = value;
+	}
+
+	@Override
+	public int getEditorY() {
+		return y;
+	}
+
+	@Override
+	public void setEditorY(int value) {
+		y = value;
+	}
+
+	@Override
+	public int getEditorWidth() {
+		return width;
+	}
+
+	@Override
+	public void setEditorWidth(int width) {
+		this.width = width;
 	}
 }
