@@ -28,7 +28,7 @@ import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
-import io.github.nahkd123.voxelwrench.context.SimpleVoxelwrenchSocket;
+import io.github.nahkd123.voxelwrench.context.SimpleVoxelwrenchContext;
 import io.github.nahkd123.voxelwrench.node.included.CuboidNode;
 import io.github.nahkd123.voxelwrench.pattern.PlaceboPattern;
 import io.github.nahkd123.voxelwrench.shape.Shape;
@@ -42,7 +42,7 @@ class CuboidNodeTest {
 		node.pos1Input.setControlledValue(new MutableBlockPos(-1, -1, -1));
 		node.pos2Input.setControlledValue(new MutableBlockPos(1, 1, 1));
 
-		Shape shape = node.shapeOutput.compute(new SimpleVoxelwrenchSocket());
+		Shape shape = node.shapeOutput.compute(new SimpleVoxelwrenchContext());
 	    Set<String> voxels = new HashSet<>();
 		shape.forEach(v -> voxels.add(v.toString()));
 

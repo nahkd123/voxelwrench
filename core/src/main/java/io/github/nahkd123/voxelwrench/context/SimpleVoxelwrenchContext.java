@@ -23,10 +23,10 @@ package io.github.nahkd123.voxelwrench.context;
 
 import java.util.random.RandomGenerator;
 
-public class SimpleVoxelwrenchSocket implements VoxelwrenchContext {
+public class SimpleVoxelwrenchContext implements VoxelwrenchContext {
 	private RandomGenerator randomGenerator;
 
-	public SimpleVoxelwrenchSocket() {
+	public SimpleVoxelwrenchContext() {
 		randomGenerator = RandomGenerator.getDefault();
 	}
 
