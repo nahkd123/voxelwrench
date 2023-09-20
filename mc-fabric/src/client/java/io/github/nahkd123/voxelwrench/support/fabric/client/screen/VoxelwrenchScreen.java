@@ -21,12 +21,12 @@
  */
 package io.github.nahkd123.voxelwrench.support.fabric.client.screen;
 
+import io.github.nahkd123.voxelwrench.support.fabric.client.ClientSession;
 import io.github.nahkd123.voxelwrench.support.fabric.client.gui.WidgetScreen;
-import io.github.nahkd123.voxelwrench.support.fabric.client.gui.included.DraggableContainerWidget;
 import io.github.nahkd123.voxelwrench.support.fabric.client.gui.included.tab.Tab;
 import io.github.nahkd123.voxelwrench.support.fabric.client.gui.included.tab.TabsWidget;
 import io.github.nahkd123.voxelwrench.support.fabric.client.gui.layout.FillLayout;
-import io.github.nahkd123.voxelwrench.support.fabric.client.gui.node.NodeWidget;
+import io.github.nahkd123.voxelwrench.support.fabric.client.gui.node.NodeNetworkWidget;
 import io.github.nahkd123.voxelwrench.util.Scope;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -34,8 +34,11 @@ import net.minecraft.text.Text;
 
 @Environment(EnvType.CLIENT)
 public class VoxelwrenchScreen extends WidgetScreen {
-	public VoxelwrenchScreen(Text title) {
+	private ClientSession session;
+
+	public VoxelwrenchScreen(Text title, ClientSession session) {
 		super(title);
+		this.session = session;
 
 		TabsWidget tabs = new TabsWidget();
 		root.getChildren().add(tabs);
@@ -53,14 +56,13 @@ public class VoxelwrenchScreen extends WidgetScreen {
 		tabs.addTab(interact);
 
 		Tab edit = new Tab(tabs, Text.literal("Edit"));
-		DraggableContainerWidget draggable = new DraggableContainerWidget();
-		draggable.getChildren().add(new NodeWidget());
-		edit.content.getChildren().add(draggable);
-		edit.content.getLayouts().add(new FillLayout().addTarget(draggable));
+		NodeNetworkWidget net = new NodeNetworkWidget(session);
+		edit.content.getChildren().add(net);
+		edit.content.getLayouts().add(new FillLayout().addTarget(net));
 		tabs.addTab(edit);
 
-		Tab share = new Tab(tabs, Text.literal("Share"));
-		tabs.addTab(share);
+		Tab about = new Tab(tabs, Text.literal("About"));
+		tabs.addTab(about);
 
 		edit.switchToThis();
 	}

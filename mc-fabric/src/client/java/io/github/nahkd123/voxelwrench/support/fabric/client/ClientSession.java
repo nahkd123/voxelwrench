@@ -23,6 +23,7 @@ package io.github.nahkd123.voxelwrench.support.fabric.client;
 
 import java.util.Optional;
 
+import io.github.nahkd123.voxelwrench.node.Node;
 import io.github.nahkd123.voxelwrench.node.network.NodeNetwork;
 import io.github.nahkd123.voxelwrench.util.Nullable;
 
@@ -30,7 +31,8 @@ import io.github.nahkd123.voxelwrench.util.Nullable;
  * <p>Store the current client session.</p>
  */
 public class ClientSession {
-	private NodeNetwork currentNetwork = null;
+	private @Nullable NodeNetwork currentNetwork = null;
+	private @Nullable Node selectedNode = null;
 
 	public Optional<NodeNetwork> getCurrentNetwork() {
 		return Optional.ofNullable(currentNetwork);
@@ -38,5 +40,13 @@ public class ClientSession {
 
 	public void setCurrentNetwork(@Nullable NodeNetwork currentNetwork) {
 		this.currentNetwork = currentNetwork;
+	}
+
+	public Optional<Node> getSelectedNode() {
+		return Optional.ofNullable(selectedNode);
+	}
+
+	public void setSelectedNode(@Nullable Node selectedNode) {
+		this.selectedNode = selectedNode;
 	}
 }

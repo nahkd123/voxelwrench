@@ -19,16 +19,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package io.github.nahkd123.voxelwrench.support.fabric.client.gui.node;
+package io.github.nahkd123.voxelwrench.support.fabric.client.gui.included;
 
 import io.github.nahkd123.voxelwrench.support.fabric.client.gui.AbstractWidget;
 import net.minecraft.client.gui.DrawContext;
 
-public class NodeWidget extends AbstractWidget {
-	{ width = 100; height = 100; }
+public abstract class CanvasWidget extends AbstractWidget {
+	{ width = 200; height = 200; }
 
 	@Override
 	public void render(DrawContext context, int mouseX, int mouseY, float delta, int globalX, int globalY) {
-		context.fill(x, y, width, height, 0xFFFF0000);
+		context.getMatrices().push();
+		context.getMatrices().translate(x, y, 0);
+		context.enableScissor(globalX + x, globalY + y, globalX + x + width, globalY + y + height);
+		renderCanvas(context, mouseX, mouseY, delta);
+		context.disableScissor();
+		context.getMatrices().pop();
 	}
+
+	public abstract void renderCanvas(DrawContext context, int mouseX, int mouseY, float delta);
 }

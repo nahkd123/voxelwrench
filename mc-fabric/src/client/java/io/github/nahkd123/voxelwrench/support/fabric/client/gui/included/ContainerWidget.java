@@ -88,7 +88,7 @@ public class ContainerWidget extends AbstractWidget implements ParentWidget {
 		for (Widget child : children) {
 			if (!child.isVisible()) continue;
 			child.useRenderers(getRenderers());
-			child.render(context, mouseX, mouseY, delta, globalX + x, globalY + y);
+			child.render(context, mouseX - x, mouseY - y, delta, globalX + x, globalY + y);
 		}
 
 		if (usingScissor) context.disableScissor();

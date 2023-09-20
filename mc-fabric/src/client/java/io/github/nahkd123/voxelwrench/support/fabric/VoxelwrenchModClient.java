@@ -23,8 +23,13 @@ package io.github.nahkd123.voxelwrench.support.fabric;
 
 import org.lwjgl.glfw.GLFW;
 
+import io.github.nahkd123.voxelwrench.node.included.CuboidNode;
+import io.github.nahkd123.voxelwrench.node.network.NetworkShapeOutputNode;
+import io.github.nahkd123.voxelwrench.node.network.NodeNetwork;
+import io.github.nahkd123.voxelwrench.pattern.NamespacedPattern;
 import io.github.nahkd123.voxelwrench.support.fabric.client.ClientSession;
 import io.github.nahkd123.voxelwrench.support.fabric.client.screen.VoxelwrenchScreen;
+import io.github.nahkd123.voxelwrench.util.blockpos.MutableBlockPos;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
@@ -46,6 +51,23 @@ public class VoxelwrenchModClient implements ClientModInitializer {
 			client.execute(() -> {
 				VoxelwrenchMod.LOGGER.info("Setting up Voxelwrench client session...");
 				session = new ClientSession();
+
+				NodeNetwork net = new NodeNetwork();
+
+				// Make a basic network
+				CuboidNode cuboid = new CuboidNode("node000");
+				net.nodes.add(cuboid);
+
+				NetworkShapeOutputNode output = new NetworkShapeOutputNode("node001");
+				output.setEditorX(200);
+				net.nodes.add(output);
+
+				cuboid.pos1Input.setControlledValue(new MutableBlockPos(-5, -5, -5));
+				cuboid.pos2Input.setControlledValue(new MutableBlockPos(5, 5, 5));
+				cuboid.patternInput.setControlledValue(new NamespacedPattern("minecraft", "diamond_block"));
+				net.connect(cuboid.shapeOutput, output.shapeInput);
+
+				session.setCurrentNetwork(net);
 			});
 		});
 
@@ -69,6 +91,6 @@ public class VoxelwrenchModClient implements ClientModInitializer {
 	private void openEditor(MinecraftClient client) {
 		if (!client.player.isCreativeLevelTwoOp()) return;
 		client.inGameHud.getChatHud().addMessage(Text.literal("debug: open editor"));
-		client.setScreen(new VoxelwrenchScreen(Text.literal("hi")));
+		client.setScreen(new VoxelwrenchScreen(Text.literal("hi"), session));
 	}
 }
