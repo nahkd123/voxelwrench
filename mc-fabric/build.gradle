@@ -23,6 +23,7 @@ dependencies {
     api project(':core')
 
     modImplementation "net.fabricmc.fabric-api:fabric-api:${rootProject.fabric_version}"
+    modImplementation "com.github.nahkd123.nahara-modkit:nahara-modkit-gui-v1:c643c78c0b"
 }
 
 processResources {
