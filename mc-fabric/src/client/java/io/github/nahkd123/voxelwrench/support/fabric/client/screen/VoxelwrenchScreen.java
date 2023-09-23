@@ -22,53 +22,29 @@
 package io.github.nahkd123.voxelwrench.support.fabric.client.screen;
 
 import io.github.nahkd123.voxelwrench.support.fabric.client.ClientSession;
-import io.github.nahkd123.voxelwrench.support.fabric.client.gui.WidgetScreen;
-import io.github.nahkd123.voxelwrench.support.fabric.client.gui.included.tab.Tab;
-import io.github.nahkd123.voxelwrench.support.fabric.client.gui.included.tab.TabsWidget;
-import io.github.nahkd123.voxelwrench.support.fabric.client.gui.layout.FillLayout;
-import io.github.nahkd123.voxelwrench.support.fabric.client.gui.node.NodeNetworkWidget;
-import io.github.nahkd123.voxelwrench.util.Scope;
+import nahara.modkit.gui.v1.NaharaScreen;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.Text;
 
 @Environment(EnvType.CLIENT)
-public class VoxelwrenchScreen extends WidgetScreen {
+public class VoxelwrenchScreen extends NaharaScreen {
 	private ClientSession session;
 
 	public VoxelwrenchScreen(Text title, ClientSession session) {
 		super(title);
 		this.session = session;
-
-		TabsWidget tabs = new TabsWidget();
-		root.getChildren().add(tabs);
-		root.getLayouts().add(Scope.wrap(new FillLayout(), layout -> {
-			layout.addTarget(tabs);
-			layout.getMargin()[0] = 4;
-			layout.getMargin()[1] = 4;
-			layout.getMargin()[2] = 4;
-			layout.getMargin()[3] = 4;
-		}));
-
-		// TODO add text: "Click on handle to edit value"
-		Tab interact = new Tab(tabs, Text.literal("Interact"));
-		interact.content.setBackground(0x00000000);
-		tabs.addTab(interact);
-
-		Tab edit = new Tab(tabs, Text.literal("Edit"));
-		NodeNetworkWidget net = new NodeNetworkWidget(session);
-		edit.content.getChildren().add(net);
-		edit.content.getLayouts().add(new FillLayout().addTarget(net));
-		tabs.addTab(edit);
-
-		Tab about = new Tab(tabs, Text.literal("About"));
-		tabs.addTab(about);
-
-		edit.switchToThis();
 	}
 
 	@Override
 	public boolean shouldPause() {
 		return false; // Should we allow player to pause?
+	}
+	
+	@Override
+	public void renderBackground(DrawContext context) {
+		if (client.world != null) return; // Don't render background
+		super.renderBackground(context);
 	}
 }
