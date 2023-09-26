@@ -26,11 +26,12 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 
 import io.github.nahkd123.voxelwrench.util.Nullable;
-import io.github.nahkd123.voxelwrench.util.registry.GlobalRegistries;
 
 /**
  * <p>A pattern with namespace and key, similar to Minecraft block IDs. For example: {@code minecraft:stone}.</p>
+ * @deprecated This pattern is currently under rewrite.
  */
+@Deprecated
 public class NamespacedPattern implements Pattern {
 	public static final PatternFactory FACTORY = new PatternFactory("voxelwrench:namespaced", input -> NamespacedPattern.tryParse(input).map(v -> (Pattern) v));
 	private static final java.util.regex.Pattern REGEX = java.util.regex.Pattern.compile("^([a-z0-9][a-z0-9_-]*)(:([a-z0-9_-]+))?$");
@@ -80,9 +81,5 @@ public class NamespacedPattern implements Pattern {
 		}
 		NamespacedPattern other = (NamespacedPattern) obj;
 		return Objects.equals(key, other.key) && Objects.equals(namespace, other.namespace);
-	}
-
-	static {
-		GlobalRegistries.REGISTRIES.getPatterns().register(FACTORY);
 	}
 }

@@ -23,8 +23,6 @@ package io.github.nahkd123.voxelwrench.pattern;
 
 import java.util.Optional;
 
-import io.github.nahkd123.voxelwrench.util.registry.GlobalRegistries;
-
 /**
  * <p>A type of pattern that doesn't do anything.</p>
  * <p>In other word, this pattern can be used on methods that doesn't accept {@code null}</p>
@@ -43,9 +41,5 @@ public class PlaceboPattern implements Pattern {
 	@Override
 	public String toString() {
 		return "&";
-	}
-
-	static {
-		GlobalRegistries.REGISTRIES.getPatterns().register(FACTORY);
 	}
 }
