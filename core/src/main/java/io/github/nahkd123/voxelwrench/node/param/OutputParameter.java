@@ -32,4 +32,8 @@ public class OutputParameter<T> implements Parameter<T> {
 	public T getValue() {
 		return compute.get();
 	}
+
+	public void connectTo(InputParameter<T> input) {
+		input.connectToThis(this);
+	}
 }

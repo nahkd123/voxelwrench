@@ -43,4 +43,8 @@ public class InputParameter<T> implements Parameter<T> {
 	public T getDefaultValue() {
 		return defaultValue;
 	}
+
+	public void connectToThis(@Nullable OutputParameter<T> inputParam) {
+		connectedFrom = Optional.ofNullable(inputParam);
+	}
 }

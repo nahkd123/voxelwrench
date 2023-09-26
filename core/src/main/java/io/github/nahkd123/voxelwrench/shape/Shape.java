@@ -1,5 +1,6 @@
 package io.github.nahkd123.voxelwrench.shape;
 
+import io.github.nahkd123.voxelwrench.instancing.Instancer;
 import io.github.nahkd123.voxelwrench.pattern.Pattern;
 import io.github.nahkd123.voxelwrench.pattern.PlaceboPattern;
 import io.github.nahkd123.voxelwrench.shape.impl.memory.MemoryShape;
@@ -7,6 +8,11 @@ import io.github.nahkd123.voxelwrench.util.blockpos.BlockPos;
 import io.github.nahkd123.voxelwrench.util.voxel.MutableVoxel;
 import io.github.nahkd123.voxelwrench.util.voxel.ReadonlyVoxel;
 
+/**
+ * <p>Shapes are "templates" that can be placed to the world.</p>
+ * <p>Shapes allows you to place "placeholder pattern", which can be replaced with different pattern when using
+ * with {@link Instancer}.</p>
+ */
 public interface Shape {
 	public void set(int x, int y, int z, Pattern pattern);
 
