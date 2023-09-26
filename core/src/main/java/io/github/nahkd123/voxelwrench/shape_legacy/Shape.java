@@ -19,41 +19,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package io.github.nahkd123.voxelwrench.shape;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
+package io.github.nahkd123.voxelwrench.shape_legacy;
 
 import io.github.nahkd123.voxelwrench.util.voxel.ReadonlyVoxel;
 
-public class SimpleMergedShape implements Shape {
-	private Shape[] shapes;
-
-	public SimpleMergedShape(Shape... shapes) {
-		this.shapes = shapes;
-	}
-
-	/**
-	 * <p>Flatten this merged shape.</p>
-	 * @return The flatten shape.
-	 */
-	public SimpleMergedShape flat() {
-		List<Shape> list = new ArrayList<>();
-
-		for (Shape shape : shapes) {
-			if (shape instanceof SimpleMergedShape sms) list.addAll(Arrays.asList(sms.shapes));
-			else list.add(shape);
-		}
-
-		return new SimpleMergedShape(list.toArray(Shape[]::new));
-	}
-
-	@Override
-	public Iterator<ReadonlyVoxel> iterator() {
-		return Stream.of(shapes).flatMap(v -> StreamSupport.stream(v.spliterator(), false)).iterator();
-	}
+/**
+ * <p>A shape can represent a single voxel, or a set of voxels organized into a cuboid or voxel sphere shape.</p>
+ */
+public interface Shape extends Iterable<ReadonlyVoxel> {
 }

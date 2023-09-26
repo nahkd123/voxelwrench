@@ -19,38 +19,41 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package io.github.nahkd123.voxelwrench.shape;
+package io.github.nahkd123.voxelwrench.shape_legacy;
 
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
-import io.github.nahkd123.voxelwrench.pattern.PlaceboPattern;
-import io.github.nahkd123.voxelwrench.util.voxel.MutableVoxel;
 import io.github.nahkd123.voxelwrench.util.voxel.ReadonlyVoxel;
 
-public class SingleVoxelShape implements Shape {
-	private MutableVoxel voxel;
+public class SimpleMergedShape implements Shape {
+	private Shape[] shapes;
 
-	public SingleVoxelShape(MutableVoxel voxel) {
-		if (voxel == null) throw new NullPointerException("voxel can't be null. Use SingleVoxelShape() instead.");
-		this.voxel = voxel;
-	}
-
-	public SingleVoxelShape() {
-		this(new MutableVoxel(0, 0, 0, PlaceboPattern.PLACEBO));
+	public SimpleMergedShape(Shape... shapes) {
+		this.shapes = shapes;
 	}
 
 	/**
-	 * <p>Get the voxel that can be modified.</p>
-	 * <p>This will never returns {@code null}.</p>
-	 * @return The voxel.
+	 * <p>Flatten this merged shape.</p>
+	 * @return The flatten shape.
 	 */
-	public MutableVoxel getVoxel() {
-		return voxel;
+	public SimpleMergedShape flat() {
+		List<Shape> list = new ArrayList<>();
+
+		for (Shape shape : shapes) {
+			if (shape instanceof SimpleMergedShape sms) list.addAll(Arrays.asList(sms.shapes));
+			else list.add(shape);
+		}
+
+		return new SimpleMergedShape(list.toArray(Shape[]::new));
 	}
 
 	@Override
 	public Iterator<ReadonlyVoxel> iterator() {
-		return Collections.singleton((ReadonlyVoxel) voxel).iterator();
+		return Stream.of(shapes).flatMap(v -> StreamSupport.stream(v.spliterator(), false)).iterator();
 	}
 }

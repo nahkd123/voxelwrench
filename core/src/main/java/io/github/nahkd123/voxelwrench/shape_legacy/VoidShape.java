@@ -19,12 +19,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package io.github.nahkd123.voxelwrench.shape;
+package io.github.nahkd123.voxelwrench.shape_legacy;
+
+import java.util.Collections;
+import java.util.Iterator;
 
 import io.github.nahkd123.voxelwrench.util.voxel.ReadonlyVoxel;
 
 /**
- * <p>A shape can represent a single voxel, or a set of voxels organized into a cuboid or voxel sphere shape.</p>
+ * <p>A shape with no voxels.</p>
  */
-public interface Shape extends Iterable<ReadonlyVoxel> {
+public class VoidShape implements Shape {
+	public static final VoidShape VOID = new VoidShape();
+
+	private VoidShape() {
+	}
+
+	@Override
+	public Iterator<ReadonlyVoxel> iterator() {
+		return Collections.emptyIterator();
+	}
 }

@@ -22,7 +22,7 @@
 package io.github.nahkd123.voxelwrench.util.voxel;
 
 import io.github.nahkd123.voxelwrench.pattern.Pattern;
-import io.github.nahkd123.voxelwrench.shape.Shape;
+import io.github.nahkd123.voxelwrench.shape_legacy.Shape;
 import io.github.nahkd123.voxelwrench.util.blockpos.BlockPos;
 
 /**

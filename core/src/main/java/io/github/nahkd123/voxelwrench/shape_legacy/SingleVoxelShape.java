@@ -19,24 +19,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package io.github.nahkd123.voxelwrench.shape;
+package io.github.nahkd123.voxelwrench.shape_legacy;
 
 import java.util.Collections;
 import java.util.Iterator;
 
+import io.github.nahkd123.voxelwrench.pattern.PlaceboPattern;
+import io.github.nahkd123.voxelwrench.util.voxel.MutableVoxel;
 import io.github.nahkd123.voxelwrench.util.voxel.ReadonlyVoxel;
 
-/**
- * <p>A shape with no voxels.</p>
- */
-public class VoidShape implements Shape {
-	public static final VoidShape VOID = new VoidShape();
+public class SingleVoxelShape implements Shape {
+	private MutableVoxel voxel;
 
-	private VoidShape() {
+	public SingleVoxelShape(MutableVoxel voxel) {
+		if (voxel == null) throw new NullPointerException("voxel can't be null. Use SingleVoxelShape() instead.");
+		this.voxel = voxel;
+	}
+
+	public SingleVoxelShape() {
+		this(new MutableVoxel(0, 0, 0, PlaceboPattern.PLACEBO));
+	}
+
+	/**
+	 * <p>Get the voxel that can be modified.</p>
+	 * <p>This will never returns {@code null}.</p>
+	 * @return The voxel.
+	 */
+	public MutableVoxel getVoxel() {
+		return voxel;
 	}
 
 	@Override
 	public Iterator<ReadonlyVoxel> iterator() {
-		return Collections.emptyIterator();
+		return Collections.singleton((ReadonlyVoxel) voxel).iterator();
 	}
 }

@@ -25,7 +25,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 
-import io.github.nahkd123.voxelwrench.shape.CuboidShape;
+import io.github.nahkd123.voxelwrench.shape_legacy.CuboidShape;
 import io.github.nahkd123.voxelwrench.support.magicavoxel.pattern.PalettePattern;
 import io.github.nahkd123.voxelwrench.support.magicavoxel.vox.Vox;
 

@@ -29,6 +29,7 @@ import java.util.Set;
 import org.junit.jupiter.api.Test;
 
 import io.github.nahkd123.voxelwrench.pattern.PlaceboPattern;
+import io.github.nahkd123.voxelwrench.shape_legacy.CuboidShape;
 import io.github.nahkd123.voxelwrench.util.voxel.MutableVoxel;
 
 class CuboidShapeTest {

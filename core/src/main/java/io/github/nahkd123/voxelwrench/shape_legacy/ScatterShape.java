@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package io.github.nahkd123.voxelwrench.shape;
+package io.github.nahkd123.voxelwrench.shape_legacy;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
