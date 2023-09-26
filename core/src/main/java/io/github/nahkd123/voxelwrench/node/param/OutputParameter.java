@@ -1,6 +1,8 @@
-package io.github.nahkd123.voxelwrench.node;
+package io.github.nahkd123.voxelwrench.node.param;
 
 import java.util.function.Supplier;
+
+import io.github.nahkd123.voxelwrench.node.Node;
 
 public class OutputParameter<T> implements Parameter<T> {
 	private Node node;

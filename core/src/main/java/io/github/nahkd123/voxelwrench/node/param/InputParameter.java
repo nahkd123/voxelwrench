@@ -1,7 +1,8 @@
-package io.github.nahkd123.voxelwrench.node;
+package io.github.nahkd123.voxelwrench.node.param;
 
 import java.util.Optional;
 
+import io.github.nahkd123.voxelwrench.node.Node;
 import io.github.nahkd123.voxelwrench.util.Nullable;
 
 public class InputParameter<T> implements Parameter<T> {
