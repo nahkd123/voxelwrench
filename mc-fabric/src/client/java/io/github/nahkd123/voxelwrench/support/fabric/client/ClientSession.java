@@ -21,8 +21,21 @@
  */
 package io.github.nahkd123.voxelwrench.support.fabric.client;
 
+import java.util.Optional;
+
+import io.github.nahkd123.voxelwrench.node.network.NodeNetwork;
+
 /**
  * <p>Store the current client session.</p>
  */
 public class ClientSession {
+	private NodeNetwork currentNetwork;
+
+	public Optional<NodeNetwork> getCurrentNetwork() {
+		return Optional.ofNullable(currentNetwork);
+	}
+
+	public void setCurrentNetwork(NodeNetwork currentNetwork) {
+		this.currentNetwork = currentNetwork;
+	}
 }

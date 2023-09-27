@@ -21,15 +21,33 @@
  */
 package io.github.nahkd123.voxelwrench.support.fabric;
 
+import org.joml.Matrix4f;
 import org.lwjgl.glfw.GLFW;
 
+import com.mojang.blaze3d.systems.RenderSystem;
+
+import io.github.nahkd123.voxelwrench.node.network.NodeNetwork;
+import io.github.nahkd123.voxelwrench.node.provided.InstanceNode;
+import io.github.nahkd123.voxelwrench.node.provided.StackInstancerNode;
 import io.github.nahkd123.voxelwrench.support.fabric.client.ClientSession;
+import io.github.nahkd123.voxelwrench.support.fabric.client.render.ApplicableToWorldRendering;
+import io.github.nahkd123.voxelwrench.support.fabric.client.render.VoxelwrenchWorldRenderer;
 import io.github.nahkd123.voxelwrench.support.fabric.client.screen.VoxelwrenchScreen;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
+import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;
+import net.minecraft.client.render.BufferBuilder;
+import net.minecraft.client.render.Camera;
+import net.minecraft.client.render.GameRenderer;
+import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.render.VertexConsumer;
+import net.minecraft.client.render.VertexFormat.DrawMode;
+import net.minecraft.client.render.VertexFormats;
+import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.text.Text;
 
@@ -46,6 +64,17 @@ public class VoxelwrenchModClient implements ClientModInitializer {
 			client.execute(() -> {
 				VoxelwrenchMod.LOGGER.info("Setting up Voxelwrench client session...");
 				session = new ClientSession();
+
+				NodeNetwork network = new NodeNetwork();
+				var node1 = new InstanceNode(network.createNewId());
+				var node2 = new StackInstancerNode(network.createNewId());
+				node1.instancer.connectTo(node2.origins);
+
+				network.add(node1);
+				network.add(node2);
+				network.getInputs().add(node1.position);
+
+				session.setCurrentNetwork(network);
 			});
 		});
 
@@ -62,6 +91,12 @@ public class VoxelwrenchModClient implements ClientModInitializer {
 			if (keybind.wasPressed()) {
 				while (keybind.wasPressed()) {}
 				openEditor(client);
+			}
+		});
+
+		WorldRenderEvents.LAST.register(context -> {
+			if (MinecraftClient.getInstance().currentScreen instanceof ApplicableToWorldRendering atwr) {
+				atwr.worldRenderAfter(context);
 			}
 		});
 	}

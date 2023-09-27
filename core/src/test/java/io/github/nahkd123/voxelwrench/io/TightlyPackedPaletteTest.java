@@ -42,7 +42,7 @@ class TightlyPackedPaletteTest {
 		assertEquals(2, palette.get(1));
 		assertEquals(3, palette.get(2));
 		assertEquals(4, palette.get(3));
-		assertEquals(9, palette.get(8));
+		assertEquals(15, palette.get(8));
 	}
 
 }

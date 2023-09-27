@@ -19,34 +19,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package io.github.nahkd123.voxelwrench.pattern;
+package io.github.nahkd123.voxelwrench.support.fabric.client.render;
 
-import java.util.Optional;
-import java.util.regex.Matcher;
-
-import io.github.nahkd123.voxelwrench.shape.Shape;
+import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;
+import net.minecraft.client.gui.screen.Screen;
 
 /**
- * <p>Tagged patterns are patterns with {@code #} as prefix. These patterns can be used in {@link Shape} and
- * "Replace Pattern Instancer" to replace tagged patterns with different one.</p>
+ * <p>Attach this interface to {@link Screen} or whatever that is to render some stuffs in
+ * world.</p>
  */
-public class TaggedPattern implements Pattern {
-	public static final PatternFactory FACTORY = new PatternFactory("voxelwrench:tagged", input -> TaggedPattern.tryParse(input).map(v -> (Pattern) v));
-	private static final java.util.regex.Pattern REGEX = java.util.regex.Pattern.compile("^#([a-z0-9-_]+)$");
-	public final String tag;
-
-	public TaggedPattern(String tag) {
-		this.tag = tag;
-	}
-
-	@Override
-	public String toFactoryString() {
-		return "#" + tag;
-	}
-
-	public static Optional<TaggedPattern> tryParse(String input) {
-		Matcher matcher = REGEX.matcher(input);
-		if (!matcher.matches()) return Optional.empty();
-		return Optional.of(new TaggedPattern(matcher.group(1)));
-	}
+public interface ApplicableToWorldRendering {
+	default void worldRenderAfter(WorldRenderContext context) {}
 }
