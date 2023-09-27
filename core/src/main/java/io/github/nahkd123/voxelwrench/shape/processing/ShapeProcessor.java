@@ -21,6 +21,7 @@
  */
 package io.github.nahkd123.voxelwrench.shape.processing;
 
+import io.github.nahkd123.voxelwrench.context.VoxelwrenchContext;
 import io.github.nahkd123.voxelwrench.shape.Shape;
 
 /**
@@ -28,12 +29,12 @@ import io.github.nahkd123.voxelwrench.shape.Shape;
  */
 @FunctionalInterface
 public interface ShapeProcessor {
-	public void process(Shape shape);
+	public void process(VoxelwrenchContext context, Shape shape);
 
 	default ShapeProcessor then(ShapeProcessor processor) {
-		return shape -> {
-			this.process(shape);
-			processor.process(shape);
+		return (context, shape) -> {
+			this.process(context, shape);
+			processor.process(context, shape);
 		};
 	}
 }

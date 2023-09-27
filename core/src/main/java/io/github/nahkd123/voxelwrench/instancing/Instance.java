@@ -24,9 +24,13 @@ package io.github.nahkd123.voxelwrench.instancing;
 import java.util.Optional;
 import java.util.function.UnaryOperator;
 
+import io.github.nahkd123.voxelwrench.shape.Shape;
+
 /**
  * <p>An instance contains more than just coordinates: it can contains reference to shape, color information,
- * patterns to use and more.</p> 
+ * patterns to use and more.</p>
+ * <p>Instances are used to locate where to fill the world with {@link Shape}. The pattern information stored
+ * in instance can be used to replace a specific pattern in given {@link Shape}.</p>
  */
 public interface Instance {
 	public <T> Optional<T> get(PropertyKey<T> key);
