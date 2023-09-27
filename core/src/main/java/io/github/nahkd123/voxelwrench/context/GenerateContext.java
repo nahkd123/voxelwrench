@@ -23,15 +23,25 @@ package io.github.nahkd123.voxelwrench.context;
 
 import java.util.random.RandomGenerator;
 
-public class SimpleVoxelwrenchContext implements VoxelwrenchContext {
-	private RandomGenerator randomGenerator;
+import io.github.nahkd123.voxelwrench.pattern.PlaceboPattern;
+import io.github.nahkd123.voxelwrench.shape.Shape;
 
-	public SimpleVoxelwrenchContext() {
-		randomGenerator = RandomGenerator.getDefault();
-	}
+/**
+ * <p>Generate context is used for generating voxels for nodes.</p>
+ * <p>Generate contexts are usually initialized with a seed, which will be used for random number generator.</p>
+ */
+public interface GenerateContext {
+	/**
+	 * <p>Get the random number generator of this context.</p>
+	 * @return The random number generator.
+	 */
+	public RandomGenerator getRandomGenerator();
 
-	@Override
-	public RandomGenerator getRandomGenerator() {
-		return randomGenerator;
-	}
+	/**
+	 * <p>Get world accessor. This can be a file from the underlying file system, or a Minecraft world loaded
+	 * in the memory.</p>
+	 * <p>Removing voxels can be done by setting the pattern to {@link PlaceboPattern}.</p>
+	 * @return The world accessor.
+	 */
+	public Shape getWorld();
 }

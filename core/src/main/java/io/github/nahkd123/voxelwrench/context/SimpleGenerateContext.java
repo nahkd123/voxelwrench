@@ -23,10 +23,24 @@ package io.github.nahkd123.voxelwrench.context;
 
 import java.util.random.RandomGenerator;
 
-public interface VoxelwrenchContext {
-	/**
-	 * <p>Get the random number generator of this context.</p>
-	 * @return The random number generator.
-	 */
-	public RandomGenerator getRandomGenerator();
+import io.github.nahkd123.voxelwrench.shape.Shape;
+
+public class SimpleGenerateContext implements GenerateContext {
+	private RandomGenerator randomGenerator;
+	private Shape world;
+
+	public SimpleGenerateContext(Shape world) {
+		this.randomGenerator = RandomGenerator.getDefault();
+		this.world = world;
+	}
+
+	@Override
+	public RandomGenerator getRandomGenerator() {
+		return randomGenerator;
+	}
+
+	@Override
+	public Shape getWorld() {
+		return world;
+	}
 }

@@ -23,9 +23,10 @@ package io.github.nahkd123.voxelwrench.node.provided;
 
 import java.util.Optional;
 
-import io.github.nahkd123.voxelwrench.context.SimpleVoxelwrenchContext;
+import io.github.nahkd123.voxelwrench.context.SimpleGenerateContext;
 import io.github.nahkd123.voxelwrench.instancing.Instance;
 import io.github.nahkd123.voxelwrench.instancing.PropertyKey;
+import io.github.nahkd123.voxelwrench.shape.Shape;
 import io.github.nahkd123.voxelwrench.util.blockpos.MutableBlockPos;
 
 public class StackInstancerNodeDemo {
@@ -37,7 +38,7 @@ public class StackInstancerNodeDemo {
 		stack.stackCount.setValue(12);
 		stack.stackOffset.setValue(new MutableBlockPos(5, 1, 0));
 
-		var stream = stack.instancer.getValue().stream(new SimpleVoxelwrenchContext());
+		var stream = stack.instancer.getValue().stream(new SimpleGenerateContext(Shape.newMemoryShape()));
 		Optional<Instance> i;
 		while ((i = stream.next()).isPresent()) System.out.println(i.get().get(PropertyKey.POSITION).get());
 	}

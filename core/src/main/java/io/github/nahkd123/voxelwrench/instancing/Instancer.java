@@ -21,7 +21,7 @@
  */
 package io.github.nahkd123.voxelwrench.instancing;
 
-import io.github.nahkd123.voxelwrench.context.VoxelwrenchContext;
+import io.github.nahkd123.voxelwrench.context.GenerateContext;
 import io.github.nahkd123.voxelwrench.instancing.stream.InstanceStream;
 
 /**
@@ -33,5 +33,5 @@ import io.github.nahkd123.voxelwrench.instancing.stream.InstanceStream;
  * direction.</p>
  */
 public interface Instancer {
-	public InstanceStream stream(VoxelwrenchContext context);
+	public InstanceStream stream(GenerateContext context);
 }
