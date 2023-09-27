@@ -28,37 +28,44 @@ import java.util.regex.Matcher;
 import io.github.nahkd123.voxelwrench.util.Nullable;
 
 /**
- * <p>A pattern with namespace and key, similar to Minecraft block IDs. For example: {@code minecraft:stone}.</p>
- * @deprecated This pattern is currently under rewrite.
+ * <p>A pattern with namespace, key and extra data, similar to Minecraft block states. For example:
+ * {@code minecraft:chest[rotation=south]}.</p>
  */
-@Deprecated
-public class NamespacedPattern implements Pattern {
-	public static final PatternFactory FACTORY = new PatternFactory("voxelwrench:namespaced", input -> NamespacedPattern.tryParse(input).map(v -> (Pattern) v));
-	private static final java.util.regex.Pattern REGEX = java.util.regex.Pattern.compile("^([a-z0-9][a-z0-9_-]*)(:([a-z0-9_-]+))?$");
+public class BlockPattern implements Pattern {
+	public static final PatternFactory FACTORY = new PatternFactory("voxelwrench:namespaced", input -> BlockPattern.tryParse(input).map(v -> (Pattern) v));
+	private static final java.util.regex.Pattern REGEX = java.util.regex.Pattern.compile("^([a-z0-9][a-z0-9_-]*)(:([a-z0-9_-]+))?(\\[.*\\])?$");
 	public final String namespace;
 	public final String key;
+	public final String extra;
 
-	public NamespacedPattern(@Nullable String namespace, String key) {
+	public BlockPattern(@Nullable String namespace, String key, @Nullable String extra) {
 		if (namespace == null) namespace = "minecraft";
 		this.namespace = namespace;
 
 		if (key == null) throw new NullPointerException("key can't be null");
 		this.key = key;
+
+		this.extra = extra != null ? extra : "";
 	}
 
-	public static Optional<NamespacedPattern> tryParse(String input) {
+	public BlockPattern(@Nullable String namespace, String key) {
+		this(namespace, key, null);
+	}
+
+	public static Optional<BlockPattern> tryParse(String input) {
 		Matcher matcher = REGEX.matcher(input);
 		if (!matcher.matches()) return Optional.empty();
 
 		String a = matcher.group(1);
 		String b = matcher.group(3);
-		if (b == null) return Optional.of(new NamespacedPattern(null, a));
-		else return Optional.of(new NamespacedPattern(a, b));
+		String c = matcher.group(4);
+		if (b == null) return Optional.of(new BlockPattern(null, a, c));
+		else return Optional.of(new BlockPattern(a, b, c));
 	}
 
 	@Override
 	public String toFactoryString() {
-		return namespace + ":" + key;
+		return namespace + ":" + key + "[" + extra + "]";
 	}
 
 	@Override
@@ -68,7 +75,7 @@ public class NamespacedPattern implements Pattern {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(key, namespace);
+		return Objects.hash(key, namespace, extra);
 	}
 
 	@Override
@@ -76,10 +83,10 @@ public class NamespacedPattern implements Pattern {
 		if (this == obj) {
 			return true;
 		}
-		if (!(obj instanceof NamespacedPattern)) {
+		if (!(obj instanceof BlockPattern)) {
 			return false;
 		}
-		NamespacedPattern other = (NamespacedPattern) obj;
-		return Objects.equals(key, other.key) && Objects.equals(namespace, other.namespace);
+		BlockPattern other = (BlockPattern) obj;
+		return Objects.equals(key, other.key) && Objects.equals(namespace, other.namespace) && Objects.equals(extra, other.extra);
 	}
 }
