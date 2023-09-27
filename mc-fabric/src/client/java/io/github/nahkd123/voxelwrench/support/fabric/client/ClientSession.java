@@ -30,6 +30,8 @@ import io.github.nahkd123.voxelwrench.node.network.NodeNetwork;
  */
 public class ClientSession {
 	private NodeNetwork currentNetwork;
+	// TODO private List<Instance> previewInstances; // Previewing instances
+	// TODO private Shape previewShapes; // Previewing shapes (likely not going to be added)
 
 	public Optional<NodeNetwork> getCurrentNetwork() {
 		return Optional.ofNullable(currentNetwork);

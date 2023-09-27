@@ -61,10 +61,7 @@ public interface ParameterControlFactory<T> {
 	 */
 	default DrawableContainer createDetached(T initial) {
 		Holder<T> holder = new Holder<>(initial);
-		return create(initial, t -> {
-			System.out.println(t);
-			holder.setValue(t);
-		});
+		return create(initial, holder::setValue);
 	}
 
 	public static final ParameterControlFactory<BlockPos> BLOCK_POS = (initial, container, updater) -> {
@@ -125,6 +122,7 @@ public interface ParameterControlFactory<T> {
 				}.content(Integer.toString(initial.getZ())).x(10).y(30).width(48).height(14),
 
 				new Button() {
+					@SuppressWarnings("resource")
 					@Override
 				 	public boolean onMouseDown(float mouseX, float mouseY, float delta, int button) {
 				 		if (super.onMouseDown(mouseX, mouseY, delta, button)) {
@@ -142,6 +140,7 @@ public interface ParameterControlFactory<T> {
 				}.label(Text.literal("Current")).x(0).y(45).width(60).height(14),
 
 				new Button() {
+					@SuppressWarnings("resource")
 					@Override
 				 	public boolean onMouseDown(float mouseX, float mouseY, float delta, int button) {
 				 		if (super.onMouseDown(mouseX, mouseY, delta, button)) {

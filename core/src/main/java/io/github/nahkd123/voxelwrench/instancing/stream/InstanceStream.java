@@ -21,6 +21,8 @@
  */
 package io.github.nahkd123.voxelwrench.instancing.stream;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -34,6 +36,18 @@ public interface InstanceStream {
 	 * @return The next instance.
 	 */
 	public Optional<Instance> next();
+
+	default void collectRemaining(Consumer<Instance> collector) {
+		for (Optional<Instance> instance = next(); instance.isPresent(); instance = next()) {
+			collector.accept(instance.get());
+		}
+	}
+
+	default List<Instance> collectRemaining() {
+		List<Instance> list = new ArrayList<>();
+		collectRemaining(list::add);
+		return list; // TODO make this unmodifiable?
+	}
 
 	/**
 	 * <p>Map the instance 1 by N, where N is the number of instances generated from generator.</p>
