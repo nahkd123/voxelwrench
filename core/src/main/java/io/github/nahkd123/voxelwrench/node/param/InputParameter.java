@@ -68,4 +68,8 @@ public class InputParameter<T> implements Parameter<T> {
 	public void connectToThis(@Nullable OutputParameter<T> inputParam) {
 		connectedFrom = Optional.ofNullable(inputParam);
 	}
+
+	public Optional<Parameter<T>> getConnectedFrom() {
+		return connectedFrom;
+	}
 }

@@ -24,9 +24,9 @@ package io.github.nahkd123.voxelwrench.node.provided;
 import java.util.Optional;
 
 import io.github.nahkd123.voxelwrench.instancing.Instance;
-import io.github.nahkd123.voxelwrench.instancing.InstanceStream;
 import io.github.nahkd123.voxelwrench.instancing.Instancer;
 import io.github.nahkd123.voxelwrench.instancing.SimpleInstance;
+import io.github.nahkd123.voxelwrench.instancing.stream.InstanceStream;
 import io.github.nahkd123.voxelwrench.node.AbstractNode;
 import io.github.nahkd123.voxelwrench.node.param.InputParameter;
 import io.github.nahkd123.voxelwrench.node.param.OutputParameter;
@@ -41,7 +41,7 @@ public class InstanceNode extends AbstractNode {
 		super(id);
 		position = new InputParameter<>(this, "position", new MutableBlockPos(0, 0, 0));
 		instancer = new OutputParameter<>(this, "instancer", () -> {
-			return () -> new InstanceStream() {
+			return context -> new InstanceStream() {
 				boolean accessed = false;
 
 				@Override

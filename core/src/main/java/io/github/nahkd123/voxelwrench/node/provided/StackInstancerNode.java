@@ -45,11 +45,11 @@ public class StackInstancerNode extends AbstractNode {
 	public StackInstancerNode(String id) {
 		super(id);
 
-		origins = new InputParameter<>(this, "origins", () -> () -> Optional.empty());
+		origins = new InputParameter<>(this, "origins", context -> () -> Optional.empty());
 		stackOffset = new InputParameter<>(this, "stackOffset", new MutableBlockPos(1, 0, 0));
 		stackCount = new InputParameter<Integer>(this, "stackCount", 1);
 
-		instancer = new OutputParameter<Instancer>(this, "instancer", () -> () -> origins.getValue().stream().generate((instance, yield) -> {
+		instancer = new OutputParameter<Instancer>(this, "instancer", () -> context -> origins.getValue().stream(context).generate((instance, yield) -> {
 			int stackCount = this.stackCount.getValue();
 			if (stackCount == 0) return;
 

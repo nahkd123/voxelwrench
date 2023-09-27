@@ -21,6 +21,9 @@
  */
 package io.github.nahkd123.voxelwrench.instancing;
 
+import io.github.nahkd123.voxelwrench.context.VoxelwrenchContext;
+import io.github.nahkd123.voxelwrench.instancing.stream.InstanceStream;
+
 /**
  * <p>Instancers are parameter object that creates a new "instance" that can be used in the nodes network.</p>
  * <p>The simplest form of instancer is "Coordinates Instancer", which only contains a single instance located
@@ -30,5 +33,5 @@ package io.github.nahkd123.voxelwrench.instancing;
  * direction.</p>
  */
 public interface Instancer {
-	public InstanceStream stream();
+	public InstanceStream stream(VoxelwrenchContext context);
 }

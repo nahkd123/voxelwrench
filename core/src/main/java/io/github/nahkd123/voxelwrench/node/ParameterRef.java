@@ -36,4 +36,8 @@ public record ParameterRef(String nodeId, String parameterId) {
 	public ParameterRef(Parameter<?> parameter) {
 		this(parameter.getNode().getNodeId(), parameter.getParameterId());
 	}
+
+	public NodeRef nodeRef() {
+		return new NodeRef(nodeId);
+	}
 }
