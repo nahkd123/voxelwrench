@@ -23,8 +23,8 @@ package io.github.nahkd123.voxelwrench.node.provided;
 
 import java.util.Optional;
 
+import io.github.nahkd123.voxelwrench.instancing.Instance;
 import io.github.nahkd123.voxelwrench.instancing.Instancer;
-import io.github.nahkd123.voxelwrench.instancing.PropertyKey;
 import io.github.nahkd123.voxelwrench.node.AbstractNode;
 import io.github.nahkd123.voxelwrench.node.param.InputParameter;
 import io.github.nahkd123.voxelwrench.node.param.OutputParameter;
@@ -40,6 +40,7 @@ public class StackInstancerNode extends AbstractNode {
 	public final InputParameter<Instancer> origins;
 	public final InputParameter<BlockPos> stackOffset;
 	public final InputParameter<Integer> stackCount;
+	public final InputParameter<Boolean> yieldFirst;
 	public final OutputParameter<Instancer> instancer;
 
 	public StackInstancerNode(String id) {
@@ -47,18 +48,20 @@ public class StackInstancerNode extends AbstractNode {
 
 		origins = new InputParameter<>(this, "origins", context -> () -> Optional.empty());
 		stackOffset = new InputParameter<>(this, "stackOffset", new MutableBlockPos(1, 0, 0));
-		stackCount = new InputParameter<Integer>(this, "stackCount", 1);
+		stackCount = new InputParameter<>(this, "stackCount", 1);
+		yieldFirst = new InputParameter<>(this, "yieldFirst", true);
 
 		instancer = new OutputParameter<Instancer>(this, "instancer", () -> context -> origins.getValue().stream(context).generate((instance, yield) -> {
 			int stackCount = this.stackCount.getValue();
 			if (stackCount == 0) return;
 
 			BlockPos offset = this.stackOffset.getValue();
-			yield.accept(instance);
+			if (yieldFirst.getValue()) yield.accept(instance);
 
 			for (int stack = 1; stack < stackCount; stack++) {
 				int stack2 = stack;
-				yield.accept(instance.map(PropertyKey.POSITION, p -> new MutableBlockPos(
+				BlockPos p = instance.get(Instance.PROPERTY_POSITION, BlockPos.class).get();
+				yield.accept(instance.then(Instance.PROPERTY_POSITION, new MutableBlockPos(
 						p.getX() + offset.getX() * stack2,
 						p.getY() + offset.getY() * stack2,
 						p.getZ() + offset.getZ() * stack2)));
@@ -68,6 +71,7 @@ public class StackInstancerNode extends AbstractNode {
 		params.add(origins);
 		params.add(stackOffset);
 		params.add(stackCount);
+		params.add(yieldFirst);
 		params.add(instancer);
 	}
 }

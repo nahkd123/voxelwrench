@@ -48,7 +48,7 @@ public class InstanceNode extends AbstractNode {
 				public Optional<Instance> next() {
 					if (accessed) return Optional.empty();
 					accessed = true;
-					return Optional.of(new SimpleInstance(position.getValue()));
+					return Optional.of(new SimpleInstance(false).set(Instance.PROPERTY_POSITION, position.getValue()));
 				}
 			};
 		});

@@ -1,42 +1,58 @@
-/*
- * Copyright (c) 2023 nahkd
- * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- */
 package io.github.nahkd123.voxelwrench.instancing;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
-import io.github.nahkd123.voxelwrench.util.blockpos.BlockPos;
+import io.github.nahkd123.voxelwrench.util.Nullable;
 
 public class SimpleInstance implements Instance {
-	private BlockPos position;
+	private Instance parent = null;
+	private List<Map.Entry<String, Object>> list = null;
+	private Map<String, Object> map = null;
 
-	public SimpleInstance(BlockPos position) {
-		if (position == null) throw new NullPointerException("position can't be null");
-		this.position = position;
+	/**
+	 * <p>Create a new simple instance that can have its properties modified.</p>
+	 * @param parent Parent instance, or {@code null} if you don't want to do "property mapping".
+	 * @param useHashMap Set this to {@code true} to use {@link HashMap} for properties. If you have a lot of
+	 * properties, you might want to use this. I think if you only have up to 5 properties, you better use
+	 * {@code false} for this.
+	 */
+	public SimpleInstance(@Nullable Instance parent, boolean useHashMap) {
+		this.parent = parent;
+		if (useHashMap) map = new HashMap<>();
+		else list = new ArrayList<>(); // TODO do we use LinkedList here? see "set()"
+	}
+
+	public SimpleInstance(boolean useHashMap) {
+		this(null, useHashMap);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T> Optional<T> get(PropertyKey<T> key) {
-		if (key == PropertyKey.POSITION) return (Optional<T>) Optional.of(position);
-		return Optional.empty();
+	public <T> Optional<T> get(String name, Class<T> type) {
+		if (list != null) return (Optional<T>) list.stream()
+				.filter(v -> v.getKey().equals(name) && type.isAssignableFrom(v.getValue().getClass()))
+				.findFirst()
+				.map(v -> v.getValue());
+
+		if (map != null) {
+			Object v = map.get(name);
+			return type.isAssignableFrom(v.getClass()) ? Optional.of((T) v) : Optional.empty();
+		}
+
+		return parent != null ? parent.get(name, type) : Optional.empty();
+	}
+
+	public SimpleInstance set(String name, Object value) {
+		if (list != null) list.add(0, Map.entry(name, value)); // TODO check before adding
+		if (map != null) map.put(name, value);
+		return this;
+	}
+
+	public Optional<Instance> getParent() {
+		return Optional.ofNullable(parent);
 	}
 }

@@ -22,7 +22,6 @@
 package io.github.nahkd123.voxelwrench.instancing;
 
 import java.util.Optional;
-import java.util.function.UnaryOperator;
 
 import io.github.nahkd123.voxelwrench.shape.Shape;
 
@@ -33,9 +32,29 @@ import io.github.nahkd123.voxelwrench.shape.Shape;
  * in instance can be used to replace a specific pattern in given {@link Shape}.</p>
  */
 public interface Instance {
-	public <T> Optional<T> get(PropertyKey<T> key);
+	public static final String PROPERTY_POSITION = "position";
 
-	default <T> Instance map(PropertyKey<T> key, UnaryOperator<T> mapper) {
-		return new MappingInstance(this, key, mapper);
+	/**
+	 * <p>Get a property from this instance.</p>
+	 * @param <T> The property type.
+	 * @param name The name of property. All system properties are defined as static fields in {@link Instance},
+	 * like {@link #PROPERTY_POSITION} for example. If you are using custom fields, I recommend adding
+	 * {@code namespace:} prefix to the name, like {@code mymod:pattern} for example.
+	 * @param type The property type. If the type is mismatched, this will returns empty {@link Optional}.
+	 * @return The {@link Optional}. As like any other APIs from Voxelwrench, this will never returns {@code null}
+	 * unless specified <b>or</b> the implementation did something wrong.
+	 */
+	public <T> Optional<T> get(String name, Class<T> type);
+
+	/**
+	 * <p><b>Create</b> a new {@link Instance} with added property.</p>
+	 * <p>Note that this method <b>creates</b> a new {@link Instance}, not modifying the current instance. If you want
+	 * to modify, consider checking out {@link SimpleInstance}.</p>
+	 * @param name The name of new property. If it is the same as existing property, it will overrides the previous value.
+	 * @param value The property value.
+	 * @return The new {@link Instance}.
+	 */
+	default Instance then(String name, Object value) {
+		return new SimpleInstance(this, false).set(name, value);
 	}
 }

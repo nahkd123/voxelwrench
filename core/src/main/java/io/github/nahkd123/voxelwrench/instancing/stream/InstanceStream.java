@@ -24,6 +24,7 @@ package io.github.nahkd123.voxelwrench.instancing.stream;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.function.UnaryOperator;
 
 import io.github.nahkd123.voxelwrench.instancing.Instance;
 
@@ -34,7 +35,21 @@ public interface InstanceStream {
 	 */
 	public Optional<Instance> next();
 
+	/**
+	 * <p>Map the instance 1 by N, where N is the number of instances generated from generator.</p>
+	 * @param generator The generator. This will be applied on each instance.
+	 * @return New stream with generator applied.
+	 */
 	default InstanceStream generate(BiConsumer<Instance, Consumer<Instance>> generator) {
 		return new InstanceGenerateStream(this, generator);
+	}
+
+	/**
+	 * <p>Map the instance 1 by 1.</p>
+	 * @param mapper The mapping function.
+	 * @return New stream with mapping function applied.
+	 */
+	default InstanceStream map(UnaryOperator<Instance> mapper) {
+		return new InstanceGenerateStream(this, (instance, consumer) -> consumer.accept(mapper.apply(instance)));
 	}
 }
