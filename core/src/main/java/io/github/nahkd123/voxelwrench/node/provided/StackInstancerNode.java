@@ -23,7 +23,6 @@ package io.github.nahkd123.voxelwrench.node.provided;
 
 import java.util.Optional;
 
-import io.github.nahkd123.voxelwrench.instancing.Instance;
 import io.github.nahkd123.voxelwrench.instancing.Instancer;
 import io.github.nahkd123.voxelwrench.instancing.PropertyKey;
 import io.github.nahkd123.voxelwrench.node.AbstractNode;
@@ -59,17 +58,10 @@ public class StackInstancerNode extends AbstractNode {
 
 			for (int stack = 1; stack < stackCount; stack++) {
 				int stack2 = stack;
-				yield.accept(new Instance() {
-					@SuppressWarnings("unchecked")
-					@Override
-					public <T> Optional<T> get(PropertyKey<T> key) {
-						if (key == PropertyKey.POSITION) return (Optional<T>) Optional.of(new MutableBlockPos(
-								offset.getX() * stack2,
-								offset.getY() * stack2,
-								offset.getZ() * stack2));
-						return instance.get(key);
-					}
-				});
+				yield.accept(instance.map(PropertyKey.POSITION, p -> new MutableBlockPos(
+						p.getX() + offset.getX() * stack2,
+						p.getY() + offset.getY() * stack2,
+						p.getZ() + offset.getZ() * stack2)));
 			}
 		}));
 

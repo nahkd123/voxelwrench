@@ -22,8 +22,7 @@
 package io.github.nahkd123.voxelwrench.instancing;
 
 import java.util.Optional;
-
-import io.github.nahkd123.voxelwrench.util.blockpos.BlockPos;
+import java.util.function.UnaryOperator;
 
 /**
  * <p>An instance contains more than just coordinates: it can contains reference to shape, color information,
@@ -32,7 +31,7 @@ import io.github.nahkd123.voxelwrench.util.blockpos.BlockPos;
 public interface Instance {
 	public <T> Optional<T> get(PropertyKey<T> key);
 
-	default BlockPos getPosition() {
-		return get(PropertyKey.POSITION).get();
+	default <T> Instance map(PropertyKey<T> key, UnaryOperator<T> mapper) {
+		return new MappingInstance(this, key, mapper);
 	}
 }
